@@ -2,21 +2,16 @@
 #define SIMPLEVECTOR_H
 
 #include <cstdlib>
-#include <cstring>
-#include <iostream>
+#include <algorithm>
 using namespace std;
 
 template <typename T>
 class SimpleVector {
 public:
-  SimpleVector():buffer(nullptr){ }
+  SimpleVector() = default;
   explicit SimpleVector(size_t size, const T& value = T()):
   vec_size(size), volume(2 * size), buffer(new T[volume])
   {
-//    volume = 2 * size;
-//    vec_size = size;
-//    buffer = new T[volume];
-
     for(size_t i = 0; i < vec_size; ++i){
       buffer[i] = value;
     }
@@ -70,9 +65,7 @@ private:
 
   void reallocate(size_t new_size) {
       T* temp_buffer = new T[new_size];
-      for(size_t i = 0; i < vec_size; i++){
-        temp_buffer[i] = buffer[i];
-      }
+      copy(begin(), end(), temp_buffer);
       delete [] buffer;
       buffer = temp_buffer;
   }
