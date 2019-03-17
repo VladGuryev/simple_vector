@@ -15,6 +15,5 @@ int main() {
   RUN_TEST(tr, TestConstruction);
   RUN_TEST(tr, TestPushBack);
   RUN_TEST(tr, TestCopyAssignment);
-
   return 0;
 }

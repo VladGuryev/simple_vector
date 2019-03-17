@@ -3,6 +3,7 @@
 
 #include <cstdlib>
 #include <algorithm>
+#include <iostream>
 using namespace std;
 
 template <typename T>
@@ -11,7 +12,9 @@ public:
   SimpleVector() = default;
   explicit SimpleVector(size_t size);
   SimpleVector(const SimpleVector& other);
+  SimpleVector(SimpleVector&& other);
   SimpleVector& operator=(const SimpleVector& rhs);
+  SimpleVector& operator=(SimpleVector&& rhs);
   ~SimpleVector();
   T& operator[](size_t index);
   T* begin();
@@ -49,7 +52,7 @@ SimpleVector<T>::SimpleVector(const SimpleVector &other)
 }
 
 template<typename T>
-SimpleVector<T> &SimpleVector<T>::operator=(const SimpleVector &rhs)
+SimpleVector<T> &SimpleVector<T>::operator=(const SimpleVector& rhs)
 {
   if(rhs.size < this->capacity){
     copy(rhs.begin(), rhs.end(), begin());
@@ -61,6 +64,25 @@ SimpleVector<T> &SimpleVector<T>::operator=(const SimpleVector &rhs)
     swap(tmp.size, size);
     swap(tmp.capacity, capacity);
   }
+  return *this;
+}
+template<typename T>
+SimpleVector<T>::SimpleVector(SimpleVector&& other):
+  size(other.size),
+  capacity(other.capacity),
+  data(other.data)
+{
+  other.data = nullptr;
+  other.size = other.capacity = 0;
+}
+
+template<typename T>
+SimpleVector<T> &SimpleVector<T>::operator=(SimpleVector&& rhs)
+{
+  SimpleVector<T> tmp(move(rhs));
+  swap(tmp.data, data);
+  swap(tmp.size, size);
+  swap(tmp.capacity, capacity);
   return *this;
 }
 
